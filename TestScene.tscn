@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://MeshInstance.gd" type="Script" id=1]
+[ext_resource path="res://CardBoard.gd" type="Script" id=3]
+
+[sub_resource type="CapsuleMesh" id=1]
+
+[node name="TestScene" type="Spatial"]
+
+[node name="Player1" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+material/0 = null
+script = ExtResource( 1 )
+
+[node name="CardBoard" type="CanvasLayer" parent="."]
+script = ExtResource( 3 )
+
+[node name="Control" type="Control" parent="CardBoard"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TimerCardDistr" type="Timer" parent="CardBoard"]
+wait_time = 5.0
+autostart = true
+[connection signal="timeout" from="CardBoard/TimerCardDistr" to="CardBoard" method="_on_TimerCardDistr_timeout"]
