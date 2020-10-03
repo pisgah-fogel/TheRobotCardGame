@@ -1,16 +1,126 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=16 format=2]
 
-[ext_resource path="res://MeshInstance.gd" type="Script" id=1]
+[ext_resource path="res://TestScene.gd" type="Script" id=1]
+[ext_resource path="res://ui.png" type="Texture" id=2]
 [ext_resource path="res://CardBoard.gd" type="Script" id=3]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Coin.gd" type="Script" id=5]
 
-[sub_resource type="CapsuleMesh" id=1]
+[sub_resource type="PlaneMesh" id=1]
+
+[sub_resource type="VisualShaderNodeColorConstant" id=8]
+constant = Color( 0.398438, 1, 0.450134, 1 )
+
+[sub_resource type="VisualShader" id=9]
+code = "shader_type spatial;
+
+
+
+void vertex() {
+// Output:0
+
+}
+
+void fragment() {
+// Color:2
+	vec3 n_out2p0;
+	float n_out2p1;
+	n_out2p0 = vec3(0.398438,1.000000,0.450134);
+	n_out2p1 = 1.000000;
+
+// Output:0
+	ALBEDO = n_out2p0;
+
+}
+
+void light() {
+// Output:0
+
+}
+"
+nodes/fragment/2/node = SubResource( 8 )
+nodes/fragment/2/position = Vector2( 80, 140 )
+nodes/fragment/connections = PoolIntArray( 2, 0, 0, 0 )
+
+[sub_resource type="ShaderMaterial" id=10]
+shader = SubResource( 9 )
+
+[sub_resource type="BoxShape" id=2]
+
+[sub_resource type="CapsuleShape" id=3]
+
+[sub_resource type="CapsuleMesh" id=4]
+
+[sub_resource type="VisualShaderNodeColorConstant" id=5]
+constant = Color( 0.921875, 1, 0, 1 )
+
+[sub_resource type="VisualShader" id=6]
+code = "shader_type spatial;
+
+
+
+void vertex() {
+// Output:0
+
+}
+
+void fragment() {
+// Color:2
+	vec3 n_out2p0;
+	float n_out2p1;
+	n_out2p0 = vec3(0.921875,1.000000,0.000000);
+	n_out2p1 = 1.000000;
+
+// Output:0
+	ALBEDO = n_out2p0;
+
+}
+
+void light() {
+// Output:0
+
+}
+"
+nodes/fragment/2/node = SubResource( 5 )
+nodes/fragment/2/position = Vector2( 80, 160 )
+nodes/fragment/connections = PoolIntArray( 2, 0, 0, 0 )
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 6 )
 
 [node name="TestScene" type="Spatial"]
-
-[node name="Player1" type="MeshInstance" parent="."]
-mesh = SubResource( 1 )
-material/0 = null
 script = ExtResource( 1 )
+
+[node name="Camera target1" type="Spatial" parent="."]
+transform = Transform( -1.62921e-07, 0.819152, -0.573576, 0, 0.573576, 0.819152, 1, 1.33457e-07, -9.34474e-08, -26.6175, 20.4563, 0 )
+
+[node name="Camera target2" type="Spatial" parent="."]
+transform = Transform( -1.62921e-07, 0.819152, -0.573576, 0, 0.573576, 0.819152, 1, 1.33457e-07, -9.34474e-08, -27.5552, 22.7265, 8.62963 )
+
+[node name="Player1" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.51572, -2.94535, -7.83117 )
+
+[node name="RemoteTransform" type="RemoteTransform" parent="Player1"]
+transform = Transform( -1.62921e-07, 0.819152, -0.573576, 0, 0.573576, 0.819152, 1, 1.33457e-07, -9.34474e-08, -21.1018, 23.4017, 7.83117 )
+remote_path = NodePath("../../Camera target1")
+
+[node name="Player2" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.51572, -2.84402, 8.62963 )
+
+[node name="RemoteTransform" type="RemoteTransform" parent="Player2"]
+transform = Transform( -1.62921e-07, 0.819152, -0.573576, 0, 0.573576, 0.819152, 1, 1.33457e-07, -9.34474e-08, -22.0394, 25.5705, 0 )
+remote_path = NodePath("../../Camera target2")
+
+[node name="Floor" type="MeshInstance" parent="."]
+transform = Transform( 50, 0, 0, 0, 1, 0, 0, 0, 50, 0.238688, 0, 0 )
+mesh = SubResource( 1 )
+material/0 = SubResource( 10 )
+
+[node name="StaticBody" type="StaticBody" parent="Floor"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Floor/StaticBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.718035, 0 )
+shape = SubResource( 2 )
 
 [node name="CardBoard" type="CanvasLayer" parent="."]
 script = ExtResource( 3 )
@@ -23,6 +133,82 @@ __meta__ = {
 }
 
 [node name="TimerCardDistr" type="Timer" parent="CardBoard"]
-wait_time = 5.0
+wait_time = 1.5
 autostart = true
+
+[node name="cursorP1" type="Sprite" parent="CardBoard"]
+position = Vector2( 100, 583.197 )
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 2 )
+hframes = 10
+
+[node name="cursorP2" type="Sprite" parent="CardBoard"]
+position = Vector2( 515.334, 578.785 )
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 2 )
+hframes = 10
+
+[node name="Coin" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.84912, 1.5314, 9.15295 )
+collision_layer = 0
+script = ExtResource( 5 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Coin"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Coin"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 7 )
+
+[node name="Control" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control"]
+margin_right = 1020.0
+margin_bottom = 800.0
+grow_vertical = 2
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ViewportContainer" type="ViewportContainer" parent="Control/HBoxContainer"]
+margin_right = 510.0
+margin_bottom = 800.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Viewport" type="Viewport" parent="Control/HBoxContainer/ViewportContainer"]
+size = Vector2( 510, 600 )
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="InterpolatedCamera" type="InterpolatedCamera" parent="Control/HBoxContainer/ViewportContainer/Viewport"]
+transform = Transform( 1, 0, 0, 0, 0.878825, 0.477143, 0, -0.477143, 0.878825, -80.0185, 37.956, 7.90873 )
+target = NodePath("../../../../../Camera target1")
+enabled = true
+
+[node name="ViewportContainer2" type="ViewportContainer" parent="Control/HBoxContainer"]
+margin_left = 514.0
+margin_right = 1024.0
+margin_bottom = 800.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Viewport" type="Viewport" parent="Control/HBoxContainer/ViewportContainer2"]
+size = Vector2( 510, 600 )
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="InterpolatedCamera" type="InterpolatedCamera" parent="Control/HBoxContainer/ViewportContainer2/Viewport"]
+transform = Transform( 0.0404107, 0.400997, -0.915188, 0, 0.915936, 0.401325, 0.999183, -0.0162178, 0.0370136, -79.8932, 38.2016, -0.988333 )
+target = NodePath("../../../../../Camera target2")
+enabled = true
 [connection signal="timeout" from="CardBoard/TimerCardDistr" to="CardBoard" method="_on_TimerCardDistr_timeout"]
+[connection signal="body_entered" from="Coin" to="Coin" method="_on_Coin_body_entered"]
